@@ -7,4 +7,5 @@ I use Fallout 4 video to weapon detect 's material  , and my motivation is want 
 photo Area to achieve this .
 
 video Link
-https://www.youtube.com/watch?v=Eis8THhm_d0&ab_channel=%E4%BC%8A%E5%B7%B4%E5%AF%86%E6%BF%83%E9%81%94
+[![asciicast](https://Eis8THhm_d0/a/113463.png)](https://www.youtube.com/watch?v=Eis8THhm_d0&ab_channel=%E4%BC%8A%E5%B7%B4%E5%AF%86%E6%BF%83%E9%81%94)
+
