@@ -474,13 +474,13 @@ if sum==5||sum==2||sum==3||sum==4
                       
                     B_isolate_dal(u,:)=b(u,:)-B_isolate(l,:); 
                      
-                    B_isolate_distance(u,1)=sqrt(B_isolate_dal(u,1).^2+B_isolate_dal(u,2).^2)  ;%直接找到距離
+                    B_isolate_distance(u,1)=sqrt(B_isolate_dal(u,1).^2+B_isolate_dal(u,2).^2)  ;
                   
                     u=u+1;
                     end
                     
                     
-                    b_area_sum=b_area(find(B_isolate_distance<=150),1) ;%先找到B的距離小於150的位置在找到面積儲存在b_area_sum
+                    b_area_sum=b_area(find(B_isolate_distance<=150),1) ;
                     b_area_sum_real=0  ;
                     
                     og=1
@@ -488,24 +488,24 @@ if sum==5||sum==2||sum==3||sum==4
                       
                        
             
-                         b_area_sum_real=b_area_sum(og,1)+ b_area_sum_real ;%一直不斷相加 可以計算出這個點範圍的面積
+                         b_area_sum_real=b_area_sum(og,1)+ b_area_sum_real ;
                          og=og+1  ;
                         
                     end
-                   ; %找小於4500的點把它刪掉
+                   ; 
                        if  b_area_sum_real<=4500
                             
-                           b(B_delete(l,1),:)=[] ; %把b的位置刪掉
-                           b_area(B_delete(l,1))=[]; %b的面積給刪掉
-                            B_dal(B_delete(l,1),:)=[]; %b_dal給刪掉
-                            B_distance(B_delete(l,1))=[] ; %b的距離給刪掉
+                           b(B_delete(l,1),:)=[] ; 
+                           b_area(B_delete(l,1))=[]; 
+                            B_dal(B_delete(l,1),:)=[]; 
+                            B_distance(B_delete(l,1))=[] ; 
                            B_delete(l:end,1)=B_delete(l:end,1)-1  ;
                            
                        end
                        
                        l=l+1  ;
                        
-                  ;    %一定要clear不然他會一直疊加明明已經已經都被刪掉了
+                  ;    
                     if l<size(B_isolate,1)
                        clear B_isolate_dal    ;
                        clear B_isolate_distance    ;
@@ -634,10 +634,10 @@ end
        %        d(D_delete,:)=[]
                
                
-      % D_top=max(d(:,1))  %上下
-     %  D_down=min(d(:,1)) %上下
-      % D_right=max(d(:,2))%左右
-    %   D_left =min(d(:,2))%左右
+      % D_top=max(d(:,1))  
+     %  D_down=min(d(:,1)) 
+      % D_right=max(d(:,2))
+    %   D_left =min(d(:,2))
        
     %singleFrame(ceil(D_down):ceil(D_top),ceil(D_left),1)=0
     %singleFrame(ceil(D_down):ceil(D_top),ceil(D_left),2)=100
@@ -670,10 +670,10 @@ end
        %        E_delete=find(E_distance>=150)
       %         e(E_delete,:)=[] 
                
-     %            E_top=max(e(:,1))  ;上下
-    %             E_down=min(e(:,1)) ;下
-   %              E_right=max(e(:,2));左右
-  %               E_left =min(e(:,2));左右
+     %            E_top=max(e(:,1))  ;
+    %             E_down=min(e(:,1)) ;
+   %              E_right=max(e(:,2));
+  %               E_left =min(e(:,2));
     
     
   %  singleFrame(ceil(E_down):ceil(E_top),ceil(E_left),1)=100
@@ -698,7 +698,7 @@ end
               
   
 
-question(:,:,:,gundam) = singleFrame;記錄影片檔
+question(:,:,:,gundam) = singleFrame;
        
   
       
