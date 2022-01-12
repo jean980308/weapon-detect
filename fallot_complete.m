@@ -6,76 +6,82 @@ fallout = VideoReader('fallout4.mp4');
 
 for gundam=52;
    
-videoFrames_19=read(fallout,gundam); 
-videoFrames_20=read(fallout,gundam+1); 
+videoFrames_19=read(fallout,gundam); %Åª¨ú¼v¤ù²Ä19±i
+videoFrames_20=read(fallout,gundam+1); %Åª¨ú¼v¤ù²Ä20±i
     
 
- num=2; 
-  num_loop=10;
-   sum=0 ; 
+ num=2;  %¨M©w­«¤ß¦ì¸mªº¼Æ¶q
+  num_loop=10; %¨M©w¦^°éªº¼Æ¶q
+   sum=0 ; %¥ı¥OÁ`©M¬°0
 
 
-  video_rgb=abs(videoFrames_19-videoFrames_20); 
+  video_rgb=abs(videoFrames_19-videoFrames_20); %¨â±i¹Ï¬Û´î¨úµ´¹ï­È
 
-rimg = video_rgb(:,:,1);
-gimg = video_rgb(:,:,2);
-bimg = video_rgb(:,:,3);
-resultr = adapthisteq(rimg);
-resultg = adapthisteq(gimg);
-resultb = adapthisteq(bimg);
-video_rgb = cat(3, resultr, resultg, resultb);
+rimg = video_rgb(:,:,1);%¹Ï¤ùªº²Ä¤@ºû«×
+gimg = video_rgb(:,:,2);%¹Ï¤ùªº²Ä¤Gºû«×
+bimg = video_rgb(:,:,3);%¹Ï¤ùªº²Ä¤Tºû«×
+resultr = adapthisteq(rimg);%¨Ï¥Î¦Û¾AÀ³ª½¤è¹Ï§¡¿Å²Ä¤@ºû«×
+resultg = adapthisteq(gimg);%¨Ï¥Î¦Û¾AÀ³ª½¤è¹Ï§¡¿Å²Ä¤Gºû«×
+resultb = adapthisteq(bimg);%¨Ï¥Î¦Û¾AÀ³ª½¤è¹Ï§¡¿Å²Ä¤Tºû«×
+video_rgb = cat(3, resultr, resultg, resultb);%§â¤T­Óºû«×¦X¨Ö
 
-   video_gray=rgb2gray(video_rgb); 
-    level=graythresh(video_gray);   
-    video_binarize=imbinarize(video_gray,level);
-      %video_binarize(1:100,1:1280)=false
+   video_gray=rgb2gray(video_rgb); %¨ú¦Ç¶¥
+    level=graythresh(video_gray);   %¥Î³o­Ó¨ç¼Æ¨ú¤Æ¬°¶Â¥Õ¦âªºlevel­È
+%­ì¥»¬O§ï0.04
+    video_binarize=imbinarize(video_gray,level);%ÅÜ¦¨¶Â¥Õ¹Ï
+%§â¤W­±ªºÂø°Tµ¹®ø°£
+      %video_binarize(1:100,1:1280)=false%§â1¨ì100*1¨ì11280³£ÅÜ¦¨¶Â¦â¡A³oÃä§Ú¦³ÂI¦b§@¹úªº·PÄ±
 
 
-video_binarize=bwareaopen(video_binarize,10,8); 
- L=bwlabeln(video_binarize,8); 
-  Area=regionprops(video_binarize,'Area');
-   Area_cell=struct2cell(Area);
-    Area_double=cell2mat(Area_cell);    
-     Area_double=Area_double';   
-      Centroid=regionprops(L,'Centroid'); 
-       Centroid_cell=struct2cell(Centroid);
-        Centroid_double=cell2mat(Centroid_cell);   
-         Centroid_double=reshape(Centroid_double,2,size(Centroid,1));
+video_binarize=bwareaopen(video_binarize,10,8); %%®ø°£Âø°T%    
+ L=bwlabeln(video_binarize,8); %¼Ğµù¹Ï§Î%
+  Area=regionprops(video_binarize,'Area');%§ä¥X­±¿n
+   Area_cell=struct2cell(Area);%Âà´«­±¿n¦¨cellÀÉ
+    Area_double=cell2mat(Area_cell);    %Âà´«­±¿nvalue
+     Area_double=Area_double';   % ÄA­Ë¤ñ¸û¦n¬İ
+      Centroid=regionprops(L,'Centroid'); %§ä¥X­«¤ß¦ì¸m
+       Centroid_cell=struct2cell(Centroid);%Âà´«¦¨cellÀÉ
+        Centroid_double=cell2mat(Centroid_cell);   %Âà´«value%
+         Centroid_double=reshape(Centroid_double,2,size(Centroid,1));%­«²Õ¯x°}ªº¦ì¸m
 
 
 for i=1:size(Centroid_double,2);
-     t(1,i)=Centroid_double(1,i);   
-
+     t(1,i)=Centroid_double(1,i);   %³oÃä¬O¬°¤FÅı¤W¤@¦C¦ì¸m¸ò²Ä¤G¦C¦ì¸m¤¬´« 
+        %¦]¬°§Ú¥´ªº®É­Ô¥H¬°¤W­±¨º¤@±Æ¬Oy¶b¤U­±¨º±Æ¬Ox¶b¡A©Ò¥H§Ú²{¦b´N¥Ñ¤¬´«¨Ó§ï¦¨¤W­±¨º¤@±Æ
+      %x¶b¤U­±¨º¤@±Æ¬Oy¶b
         l(1,i)=Centroid_double(2,i);
           Centroid_double(1,i)=l(1,i);
               Centroid_double(2,i)=t(1,i);
 end
 
 
-                 DOT=Centroid_double';
+                 DOT=Centroid_double';%ÄA­Ë ³o¼Ë¬İ°_¨Ó¦n¬İ
 
 
+%³oÃä¬O¬°¤FÅı¨â­Óªì©l¦ì¸mªºÂI¬Û¶Z¤j©ó200·PÄ±³o¼Ë¤ñ¸û·Ç½T
 
-    yo=1 ;
-     go=1;
+    yo=1 ;%§P§O¨âÂI¶ZÂ÷200
+     go=1;%§P§O¨âÂI¶ZÂ÷200
      
 while yo==1;
     
-    
+    %³oÃä¬O¬°¤F§P§OÀH¾÷ªº¨âÂI¬O¤£¬O¦P¤@ÂI¡A¤£µM¦³¾÷·|¬D¥Xªº¨âÂI¬O¦P¤@ÂI
     while go==1;
-        must_inequal=ceil(rand(1,num)*length(Centroid_cell));
-       if must_inequal(1)~=must_inequal(2); 
-           go=2;
+        must_inequal=ceil(rand(1,num)*length(Centroid_cell));%ÀH¾÷ªº¨âÂI
+       if must_inequal(1)~=must_inequal(2); %§P§O¨âÂI¬O§_¬°¦P¤@ÂI
+           go=2;%³o¼Ë¥i¥H¸õ¥X°j°é
        end;
        
     end
    
-  Cent=Centroid_cell(must_inequal)                             ;
-    Cent=cell2mat(Cent)                                         ; 
-      Cent=reshape(Cent,2,num)                                   ;  
-        Cent_minus=Cent(1,:)-Cent(2,:)                            ;  
-          Cent_dist=sqrt(Cent_minus(1,1)^2+Cent_minus(1,2)^2)      ;  
+  Cent=Centroid_cell(must_inequal)                             ;%ÀH¾÷§ä¥X­«¤ß¦ì¸m
+    Cent=cell2mat(Cent)                                         ; %ÅÜ¦¨cell­È
+      Cent=reshape(Cent,2,num)                                   ;  %­«²Õ¦ì¸m
+        Cent_minus=Cent(1,:)-Cent(2,:)                            ;  %¨â­Ó­«¤ß¬Û´î
+          Cent_dist=sqrt(Cent_minus(1,1)^2+Cent_minus(1,2)^2)      ;  %ºâ¨â­Ó­«¤ß©¼¦¹ªº¶ZÂ÷
           ;
+          %¦pªG ¨â­Ó­«¤ß¦ì¸m¶ZÂ÷¤j©ó200ªº¸Ü §ïyo=2´N¥i¥H¸õ¥X°j°é¡A¦]¬°§Ú§Æ±æ¨â­Ó­«¤ß¦ì¸m¤j©ó200
+          %¤£µM·|¤@ª½¦b°j°é¸Ì­±¤ÏÂĞ­pºâ¡Aºâ¨ì¤S¶W¹L200¬°¤î
 if Cent_dist>=200 
 
     yo=2;
@@ -83,29 +89,29 @@ end
    
 go=1;
 end
-%Cent=cell2mat(Cent)                                          
-%Cent=reshape(Cent,2,num)                                     
+%Cent=cell2mat(Cent)                                          %ÅÜ¦¨cell­È
+%Cent=reshape(Cent,2,num)                                     %­«²Õ¦ì¸m
 
 for i=1:size(Cent,2)
-t(1,i)=Cent(1,i);
-  l(1,i)=Cent(2,i); 
+t(1,i)=Cent(1,i);%³oÃä¬O¬°¤FÅı¤W¤@¦C¦ì¸m¸ò²Ä¤G¦C¦ì¸m¤¬´« ¦]¬°§Ú¥´ªº®É­Ô¥H¬°¤W­±¨º¤@±Æ¬Oy¶b¤U­±¨º±Æ¬Ox¶b
+  l(1,i)=Cent(2,i); %©Ò¥H§Ú²{¦b´N¥Ñ¤¬´«¨Ó§ï¦¨¤W­±¨º¤@±Æx¶b¤U­±¨º¤@±Æ¬Oy¶b
     Cent(1,i)=l(1,i);
       Cent(2,i)=t(1,i);
 end
 
-Cent=Cent' ;
+Cent=Cent' ;%ÄA­Ë¯x°}
 
-count_A=0,count_B=0, count_C=0,count_D=0,count_E=0 ; 
+count_A=0,count_B=0, count_C=0,count_D=0,count_E=0 ; %­p¼Æ¾¹¥ı¥O¬°0
             
-o=0,p=0,q=0,w=0,r=0 ;
+o=0,p=0,q=0,w=0,r=0 ;%°»´ú¬O§_¦³³o­ÓÅÜ¼ÆªºÅÜ¼Æ¬°0
 
                           
                           
 loop=1               ;         
                          
-while loop<=num_loop 
+while loop<=num_loop %°µ´X¦¸
     
-    a=[0 0]; 
+    a=[0 0]; %§âa,b,c,d,e¥t¦¨¯x°}ªº§Î¦¡¥L¤~¥i¥H¿é¤J ¤£µM¤@Ãä¬O¤@¯ëªº¼Æ¦r¥t¤@Ã@¦¡¯x°}¤£¹ïµ¥
     b=[0 0];
     c=[0 0];
     d=[0 0];
@@ -114,71 +120,72 @@ while loop<=num_loop
     
     
        j=1
-       while j<=size(Centroid,1) 
+       while j<=size(Centroid,1) %­«¤ßªº¼Æ¶q
              i=1;
-          while i<=num 
+          while i<=num %numµ¥©ó§Ú­n¼Ğ¥X´X­Óª«Åé 
               
-              dal(i,:)=DOT(j,:)-Cent(i,:) ;
+              dal(i,:)=DOT(j,:)-Cent(i,:) ;%¨C¤@­Ó­«¤ß¦ì¸m¸òrand¨ú¥Xªº­«¤ß´î±¼
                i=i+1;
                
            end
        
        
        m=1;
-      while m<=num 
+      while m<=num %ºâ¶ZÂ÷
           
              
-         distance(m,1)=sqrt(dal(m,1)^2+dal(m,2)^2)  ; 
+         distance(m,1)=sqrt(dal(m,1)^2+dal(m,2)^2)  ;%ºâ¶ZÂ÷ 
         m=m+1;
           
       end
                 
       
-          minmum=min(distance); 
-              special=find(distance==minmum); 
+          minmum=min(distance); %§ä¥X³Ì¤p¶ZÂ÷ªº­È
+              special=find(distance==minmum); %§ä²Ä´X¦æ ´N¥Nªí¥L¬OÄİ©óa b c d e¬Y¤@Ãş
       
       
+      %ª`·N¤j¤p¼ga b c A B C¤p¼g¬O¬°¤Fºtºâªk§PÂ_»¡¨ì©³­n§ä´X­Óª««~
       
-      if special==1        
+      if special==1        %Âk¦bA
           
           
-            count_A=count_A+1         ; 
-             a(count_A,1:2)=DOT(j,:)  ; 
-               a_area(count_A,1)=Area_double(j,1); 
-                 o=1                  ; 
+            count_A=count_A+1         ; %¦C­p¼Æ¾¹
+             a(count_A,1:2)=DOT(j,:)  ; %§â­«¤ß¦ì¸m¿é¤J¹L¥h
+               a_area(count_A,1)=Area_double(j,1);%§Ú§â­±¿nªº¦ì¸m°O¦í ¤è«K§ä¥X¥L¬O©³­Ó­«¤ß
+                 o=1                  ; %¥Î¨Óªí¥Ü³o­Ó¦a¤è¦³¼Æ¦r¿é¤J
                     end
       
-      if special==2  
+      if special==2  %Âk¦bB
          
-          count_B=count_B+1          ; 
-            b(count_B,1:2)=DOT(j,:)   ;     
-              b_area(count_B,1)=Area_double(j,1);
-                 p=1                  ; 
+          count_B=count_B+1          ; %¦C­p¼Æ¾¹
+            b(count_B,1:2)=DOT(j,:)   ;     %§â­«¤ß¦ì¸m¿é¤J¹L
+              b_area(count_B,1)=Area_double(j,1);%§Ú§â­±¿nªº¦ì¸m°O¦í ¤è«K§ä¥X¥L¬O©³­Ó­«¤ß
+                 p=1                  ; %¥Î¨Óªí¥Ü³o­Ó¦a¤è¦³¼Æ¦r¿é¤J
        end
        
-       if special==3 
+       if special==3 %Âk¦bC
            
           
-          count_C=count_C+1           
-           c(count_C,:)=DOT(j,:)       ;
+          count_C=count_C+1           ;%¦C­p¼Æ¾¹
+           c(count_C,:)=DOT(j,:)       ;%§â­«¤ß¦ì¸m¿é¤J¹L¥h
             c(count_C,3)=Area_double(j,1);
-             q=1                   ;
+             q=1                   ;%¥Î¨Óªí¥Ü³o­Ó¦a¤è¦³¼Æ¦r¿é¤J
            
       end
        
        
-       if special==4 
+       if special==4 %Âk¦bD
         
-          count_D=count_D+1         ; 
-             d(count_D,:)=DOT(j,:)   ;   
-               w=1                   ;
+          count_D=count_D+1         ; %¦C­p¼Æ¾¹
+             d(count_D,:)=DOT(j,:)   ;   %§â­«¤ß¦ì¸m¿é¤J¹L¥h
+               w=1                   ;%¥Î¨Óªí¥Ü³o­Ó¦a¤è¦³¼Æ¦r¿é¤J
        end
        
-        if special==5  
+        if special==5  %Âk¦bE
        
-           count_E=count_E+1          ;
-               e(count_E,:)=DOT(j,:)   ;   
-                 r=1                  ; 
+           count_E=count_E+1          ;%¦C­p¼Æ¾¹
+               e(count_E,:)=DOT(j,:)   ;   %§â­«¤ß¦ì¸m¿é¤J¹L¥h
+                 r=1                  ; %¥Î¨Óªí¥Ü³o­Ó¦a¤è¦³¼Æ¦r¿é¤J
         end
                    
           j=j+1;
@@ -189,50 +196,50 @@ while loop<=num_loop
 
 
 
-if isempty(o)==0   
+if isempty(o)==0   %§PÂ_¬O§_¦³¥Î¨ì
      if size(a,1)>=2
-         mean_A=mean(a);    
+         mean_A=mean(a);    %ºâ¥­§¡§ä¥X¦ì¸m
            end
      if size(a,1)==1
-         mean_A=a;         
+         mean_A=a;         %¦ì¸m¤@¼Ë
            end
 end
 
-if isempty(p)==0  
+if isempty(p)==0  %§PÂ_¬O§_¦³¥Î¨ì
     if size(b,1)>=2
-        mean_B=mean(b) ;   
+        mean_B=mean(b) ;   %ºâ¥­§¡§ä¥X¦ì¸m
                     end
     
     if size(b,1)==1
-        mean_B=b;          
+        mean_B=b;          %¦ì¸m¤@¼Ë
                     end
   
 end
     
-if isempty(q)==0  
+if isempty(q)==0  %§PÂ_¬O§_¦³¥Î¨ì
     
-    mean_C=mean(c) ;   
+    mean_C=mean(c) ;   %ºâ¥­§¡§ä¥X¦ì¸m
     
     
       end
         
-if isempty(w)==0  
+if isempty(w)==0  %§PÂ_¬O§_¦³¥Î¨ì
     
-   mean_D=mean(d)   ; 
+   mean_D=mean(d)   ; %ºâ¥­§¡§ä¥X¦ì¸m
     
        end
 
 
-if isempty(r)==0  
+if isempty(r)==0  %§PÂ_¬O§_¦³¥Î¨ì
     
-   mean_E=mean(e)    ;
+   mean_E=mean(e)    ;%ºâ¥­§¡§ä¥X¦ì¸m
     
 end
 
-sum=o+p+q+w+r   ;   
+sum=o+p+q+w+r   ; %ºâ¥XÁ`¦@­n°»´ú´X­Óª«Åé  
 
 
-if sum==1      
+if sum==1      %¤@­Óª«Åé®É
    
     
     mean_mean=mean_A;
@@ -240,25 +247,25 @@ if sum==1
       end
 
 
-if sum==2    
+if sum==2    %¨â­Óª«Åé
 
    mean_mean=cat(1,mean_A,mean_B);
 
      end
 
-if sum==3   
+if sum==3   %¤T­Óª«Åé
     
     mean_mean=cat(1,mean_A,mean_B,mean_C);
      
      end
 
-if sum==4   
+if sum==4   %¥|­Óª«Åé
    
     mean_mean=cat(1,mean_A,mean_B,mean_C,mean_D)
     
      end
 
-if sum==5   
+if sum==5   %¤­­Óª«Åé
     
     mean_mean=cat(1,mean_A,mean_B,mean_C,mean_D,mean_E)
     
@@ -266,15 +273,15 @@ if sum==5
   
 
 
-Cent=mean_mean ; 
-count_A=0    ; 
-count_B=0    ; 
-count_C=0    ;         
-count_D=0    ;
-count_E=0    ;
+Cent=mean_mean ; %§â¥­§¡­È¿é¤J­«¤ß
+count_A=0    ; %§â¼Æ¼ÆÂk¬°0
+count_B=0    ; %§â¼Æ¼ÆÂk¬°0
+count_C=0    ;    %§â¼Æ¼ÆÂk¬°0     
+count_D=0    ;%§â¼Æ¼ÆÂk¬°0
+count_E=0    ;%§â¼Æ¼ÆÂk¬°0
 
 
-if(loop<num_loop)
+if(loop<num_loop)  %§âa b c d e a_area b_area distance dal µ¥¼Æ¦r²M°£µ¥¨ì¦]¬°­n¤@ª½­«·s´M§äa b c d eªº¦ì¸m
     p=0;
     clear a ;
     clear b;
@@ -287,16 +294,17 @@ if(loop<num_loop)
     clear b_sum;
     clear distance;
     clear dal;
-count_A=0     ;
-count_B=0     ;
-count_C=0      ;       
-count_D=0    ;
-count_E=0    ;
+count_A=0     ;%§â¼Æ¼ÆÂk¬°0
+count_B=0     ;%§â¼Æ¼ÆÂk¬°0
+count_C=0      ;  %§â¼Æ¼ÆÂk¬°0     
+count_D=0    ;%§â¼Æ¼ÆÂk¬°0
+count_E=0    ;%§â¼Æ¼ÆÂk¬°0
 
 
 end
 
 
+%³oÃä§PÂ_¬O§_¦³¨â­Óª«Åé
 
     
 
@@ -339,25 +347,26 @@ end
   end
 
          
-singleFrame = read(fallout,gundam); 
+singleFrame = read(fallout,gundam); %Åª¨ú¼v¤ùªº¬Y¤@±i¹Ï¤ù
 
-
+%³oÃä¬O§Q¥Î¥[Á`¨Ó§P§O¤µ¤Ñ§Ú¬O­n§ä´X­Óª«Åé
 if sum==1||sum==2||sum==3||sum==4||sum==5 
-A_centroid(1,:)=Cent(1,:); 
+A_centroid(1,:)=Cent(1,:); %§â­«¤ß¦ì¸m¿é¤Jµ¹A
 
            
         
        g=0
+       %³oÃä¬O§äAªºdistance¸òA_dal
            while g<size(a,1)
              g=g+1 ;
-              A_dal(g,:)=a(g,:)-A_centroid(1,:); 
-              A_distance(g,1)=sqrt(A_dal(g,1)^2+A_dal(g,2)^2);
+              A_dal(g,:)=a(g,:)-A_centroid(1,:); %¨C¤@­Ó­«¤ß¦ì¸m¸òrand¨ú¥Xªº­«¤ß´î±¼
+              A_distance(g,1)=sqrt(A_dal(g,1)^2+A_dal(g,2)^2);%§ä­«¤ßªº¶ZÂ÷
            
            end
            
            
-            A_delete=find(A_distance>=150);
-            a_isolate(:,:)=a(A_delete,:) ;
+            A_delete=find(A_distance>=150);%¥ı§äA_distance¶ZÂ÷¤j©ó150ªºÂIª½±µ¬Oaªº¦ì¸m
+            a_isolate(:,:)=a(A_delete,:) ;%§ä¨ì©t¥ßªºÂI½T¤Á®y¼Ğ¦ì¸m
             
             
               l=1 ;
@@ -367,35 +376,35 @@ A_centroid(1,:)=Cent(1,:);
                     s=1 ;
                     while s<size(a,1)             
                       
-                   A_isolate_dal(s,:)=a(s,:)-a_isolate(l,:)
-                  A_isolate_distance(s,1)=sqrt(A_isolate_dal(s,1).^2+A_isolate_dal(s,2).^2)
+                   A_isolate_dal(s,:)=a(s,:)-a_isolate(l,:)%u¦¸aªº¨C¤@­ÓÂI¦ì¸mÀË½Õ¤@­Ó­n³Q°Å±¼aªº¦ì¸m
+                  A_isolate_distance(s,1)=sqrt(A_isolate_dal(s,1).^2+A_isolate_dal(s,2).^2)%ºâ¥Xaªº¶ZÂ÷
                           s=s+1
                     end
                     
                     
                     
-                   a_area_sum=a_area(find(A_isolate_distance<=150),1)
-                   a_area_sum_real=0 
+                   a_area_sum=a_area(find(A_isolate_distance<=150),1)%§ä¨ìa½d³ò¤p©ó150§â¨º¨Ç¦ì¸m³£Âà§ä¥X¥L­Ì¨C¤@­Ó­±¿n
+                   a_area_sum_real=0 %¥ı¥O0¤£µM¥L¦n¹³·|¿ù»~
                     
                    of=1
                     while of<size(a_area_sum,1)
-                        a_area_sum_real=a_area_sum(of,1)+ a_area_sum_real; 
+                        a_area_sum_real=a_area_sum(of,1)+ a_area_sum_real; %¤@ª½¤£Â_¥[
                         of=of+1 ;
 
                     end
                     
-                  Area_sum(l)=a_area_sum_real  ; 
-                    if  a_area_sum_real<=4500   
-                            a(A_delete(l,1),:)=[]; 
-                            a_area(A_delete(l,1))=[];
-                            A_dal(A_delete(l,1),:)=[];
-                            A_distance(A_delete(l,1))=[];
-                            A_delete(l:end,1)=A_delete(l:end,1)-1  ;
+                  Area_sum(l)=a_area_sum_real  ; %·Q°O¿ı¨C­Ó­n³Q§R´îªº­±¿n
+                    if  a_area_sum_real<=4500   %§PÂ_¤p©ó4500­±¿nªºÂI
+                            a(A_delete(l,1),:)=[]; %ª½±µ§R±¼¨º­ÓÂI
+                            a_area(A_delete(l,1))=[];%ª½±µ§R±¼¨º­Ó­±¿n
+                            A_dal(A_delete(l,1),:)=[];%ª½±µ§R±¼¨º­Ódal
+                            A_distance(A_delete(l,1))=[];%ª½±µ§R±¼¨º­ÓA_distance
+                            A_delete(l:end,1)=A_delete(l:end,1)-1  ;%¦]¬°¨º­ÓÂI³Q§R±¼³s±a¦ì¸m³£­n©¹¤U»¼¸É©Ò¥H´î1
                             
                     end
                     
                     l=l+1;
-                   
+                   %¥ş³¡²M°£
                     if l<size(a_isolate,1)
                    clear a_area_sum_real ; 
                    clear A_isolate_dal;
@@ -406,26 +415,27 @@ A_centroid(1,:)=Cent(1,:);
                    
                       
                     end 
-               
+    %¦pªGa¬O¦³¼Æ¦r¤£¬OªÅªº           
 if isempty(a)==0         
-a_sum=0 ;
+a_sum=0 ;%¥ı®ga_sum¬°0
 
 
-as=1   ; 
+as=1   ; %asµ¥©ó1¥Î¨Ó²Ö¥[a¾ã­Ó­±¿n
 while as<=size(a_area,1)
 
 a_sum=a_area(as,1)+a_sum ;
 as=as+1 ;
 
 end
-         
+         %¤µ¤Ñ°²³]aªº­±¿n¤j©ó2000
       if a_sum>=2000                 
-              
-        A_top=max(a(:,1)) ; %ä¸‹
-        A_down=min(a(:,1)); %ä¸Š
-        A_right=max(a(:,2));%å³
-        A_left =min(a(:,2));%å·¦
+              %§ä¦ì¸m ¤W¤U¥ª¥k
+        A_top=max(a(:,1)) ; %¤U
+        A_down=min(a(:,1)); %¤W
+        A_right=max(a(:,2));%¥k
+        A_left =min(a(:,2));%¥ª
         
+        %µe¹Ï
     
     singleFrame(ceil(A_down):ceil(A_top),ceil(A_left),1)=255 ;
     singleFrame(ceil(A_down):ceil(A_top),ceil(A_left),2)=0  ;
@@ -453,34 +463,34 @@ end
 if sum==5||sum==2||sum==3||sum==4
 
     
-    B_centroid(1,:)=Cent(2,:) ;
+    B_centroid(1,:)=Cent(2,:) ;%§ä­«¤ß²Ä¤GÂI¬°bÂI
 
             t=0 ;
            while t<size(b,1) 
               
               t=t+1;
-              B_dal(t,:)=b(t,:)-B_centroid(1,:) ;
-              B_distance(t,1)=sqrt(B_dal(t,1)^2+B_dal(t,2)^2) ; 
+              B_dal(t,:)=b(t,:)-B_centroid(1,:) ;%¨C¤@­Ó­«¤ß¦ì¸m¸òrand¨ú¥Xªº­«¤ß´î±¼
+              B_distance(t,1)=sqrt(B_dal(t,1)^2+B_dal(t,2)^2) ; %¨C¤@­Ó¸ò­«¤ßb¬Û´îªº¶ZÂ÷
               
            end
             
-            B_delete=find(B_distance>=150);
-            B_isolate(:,:)=b(B_delete,:) ;
+            B_delete=find(B_distance>=150);%¥i¥Hª¾¹D­«¤ßªº²Ä´X­Ó¦ì¸m¡]Centroid) ¥i¥H¥Î¨Ó§äarea
+            B_isolate(:,:)=b(B_delete,:) ;%§ä¨ì¶W¹L¶ZÂ÷150ªºB®y¼Ğªº¦ì¸m ¨Ó§äbªº®y¼Ğ¦ì¸m¡A
                l=1 ;
               while l<size(B_isolate,1)
                  
                     u=1 ;
                    while u<size(b,1)
                       
-                    B_isolate_dal(u,:)=b(u,:)-B_isolate(l,:); 
+                    B_isolate_dal(u,:)=b(u,:)-B_isolate(l,:); %¨C¤@ÂIbªº¦ì¸m°Å±¼¶W¹L¶ZÂ÷150ªºb¦ì¸m
                      
-                    B_isolate_distance(u,1)=sqrt(B_isolate_dal(u,1).^2+B_isolate_dal(u,2).^2)  ;
+                    B_isolate_distance(u,1)=sqrt(B_isolate_dal(u,1).^2+B_isolate_dal(u,2).^2)  ;%ª½±µ§ä¨ì¶ZÂ÷
                   
                     u=u+1;
                     end
                     
                     
-                    b_area_sum=b_area(find(B_isolate_distance<=150),1) ;
+                    b_area_sum=b_area(find(B_isolate_distance<=150),1)%¥ı§ä¨ìBªº¶ZÂ÷¤p©ó150ªº¦ì¸m¦b§ä¨ì­±¿nÀx¦s¦bb_area_sum
                     b_area_sum_real=0  ;
                     
                     og=1
@@ -488,24 +498,24 @@ if sum==5||sum==2||sum==3||sum==4
                       
                        
             
-                         b_area_sum_real=b_area_sum(og,1)+ b_area_sum_real ;
+                         b_area_sum_real=b_area_sum(og,1)+ b_area_sum_real ;%¤@ª½¤£Â_¬Û¥[ ¥i¥H­pºâ¥X³o­ÓÂI½d³òªº­±¿n
                          og=og+1  ;
                         
                     end
-                   ; 
+                    %§ä¤p©ó4500ªºÂI§â¥¦§R±¼
                        if  b_area_sum_real<=4500
                             
-                           b(B_delete(l,1),:)=[] ; 
-                           b_area(B_delete(l,1))=[]; 
-                            B_dal(B_delete(l,1),:)=[]; 
-                            B_distance(B_delete(l,1))=[] ; 
+                           b(B_delete(l,1),:)=[] ; %§âbªº¦ì¸m§R±¼
+                           b_area(B_delete(l,1))=[]; %bªº­±¿nµ¹§R±¼
+                            B_dal(B_delete(l,1),:)=[]; %b_dalµ¹§R±¼
+                            B_distance(B_delete(l,1))=[] ; %bªº¶ZÂ÷µ¹§R±¼
                            B_delete(l:end,1)=B_delete(l:end,1)-1  ;
                            
                        end
                        
                        l=l+1  ;
                        
-                  ;    
+                      %¤@©w­nclear¤£µM¥L·|¤@ª½Å|¥[©ú©ú¤w¸g¤w¸g³£³Q§R±¼¤F
                     if l<size(B_isolate,1)
                        clear B_isolate_dal    ;
                        clear B_isolate_distance    ;
@@ -515,7 +525,7 @@ if sum==5||sum==2||sum==3||sum==4
                     end
               end
 
-            
+%§ä¦ì¸m             
         
 
  if isempty(b)==0    
@@ -533,11 +543,11 @@ end
 if b_sum>=2000
 
 
-        B_top=max(b(:,1)) ; %ä¸Šä¸‹
-        B_down=min(b(:,1)); %ä¸Šä¸‹
-        B_right=max(b(:,2));%å·¦å³
-        B_left =min(b(:,2));%å·¦å³
-   ; %ç•«åœ–    
+        B_top=max(b(:,1)) ; %¤W¤U
+        B_down=min(b(:,1)); %¤W¤U
+        B_right=max(b(:,2));%¥ª¥k
+        B_left =min(b(:,2));%¥ª¥k
+    %µe¹Ï    
    singleFrame(ceil(B_down):ceil(B_top),ceil(B_left),1)=255;
    singleFrame(ceil(B_down):ceil(B_top),ceil(B_left),2)=0 ;
   singleFrame(ceil(B_down):ceil(B_top),ceil(B_left),3)=0;
@@ -596,10 +606,10 @@ end
         %       C_delete=find(C_distance>=150)
        %        c(C_delete,:)=[] 
                
-      % C_top=max(c(:,1))  ;%ä¸Šä¸‹
-      % C_down=min(c(:,1)) ;%ä¸Šä¸‹
-      % C_right=max(c(:,2));%å·¦å³
-     %  C_left =min(c(:,2));%å·¦å³
+      % C_top=max(c(:,1))  %¤W¤U
+      % C_down=min(c(:,1)) %¤W¤U
+      % C_right=max(c(:,2))%¥ª¥k
+     %  C_left =min(c(:,2))%¥ª¥k
    
     %singleFrame(ceil(C_down):ceil(C_top),ceil(C_left),1)=0
     %singleFrame(ceil(C_down):ceil(C_top),ceil(C_left),2)=0 
@@ -634,10 +644,10 @@ end
        %        d(D_delete,:)=[]
                
                
-      % D_top=max(d(:,1))  
-     %  D_down=min(d(:,1)) 
-      % D_right=max(d(:,2))
-    %   D_left =min(d(:,2))
+      % D_top=max(d(:,1))  %¤W¤U
+     %  D_down=min(d(:,1)) %¤W¤U
+      % D_right=max(d(:,2))%¥ª¥k
+    %   D_left =min(d(:,2))%¥ª¥k
        
     %singleFrame(ceil(D_down):ceil(D_top),ceil(D_left),1)=0
     %singleFrame(ceil(D_down):ceil(D_top),ceil(D_left),2)=100
@@ -670,10 +680,10 @@ end
        %        E_delete=find(E_distance>=150)
       %         e(E_delete,:)=[] 
                
-     %            E_top=max(e(:,1))  ;
-    %             E_down=min(e(:,1)) ;
-   %              E_right=max(e(:,2));
-  %               E_left =min(e(:,2));
+     %            E_top=max(e(:,1))  %¤W¤U
+    %             E_down=min(e(:,1)) %¤W¤U
+   %              E_right=max(e(:,2))%¥ª¥k
+  %               E_left =min(e(:,2))%¥ª¥k
     
     
   %  singleFrame(ceil(E_down):ceil(E_top),ceil(E_left),1)=100
@@ -698,7 +708,7 @@ end
               
   
 
-question(:,:,:,gundam) = singleFrame;
+question(:,:,:,gundam) = singleFrame%°O¿ı¼v¤ùÀÉ
        
   
       
